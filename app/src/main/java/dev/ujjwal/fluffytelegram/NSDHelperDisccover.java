@@ -6,6 +6,10 @@ import android.net.nsd.NsdServiceInfo;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
+import dev.ujjwal.fluffytelegram.events.Broker;
+
 class NSDHelperDisccover {
 
     private String TAG = MainActivity.class.getName();
@@ -46,7 +50,7 @@ class NSDHelperDisccover {
                     // Service type is the string containing the protocol and
                     // transport layer for this service.
                     Log.d(TAG, "Unknown Service Type: " + service.getServiceType());
-                } else if (service.getServiceName().contains(Constants.NSD_SERVICE_NAME)) {
+                } else if (service.getServiceName().equalsIgnoreCase(Constants.NSD_SERVICE_NAME)) {
                     initializeResolveListener();
                     nsdManager.resolveService(service, resolveListener);
                 }
@@ -95,6 +99,7 @@ class NSDHelperDisccover {
                 Log.e(TAG, "Resolve Succeeded. " + serviceInfo);
 
                 Toast.makeText(context, "Service Info: " + serviceInfo.toString(), Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new Broker(serviceInfo.getHost().toString().replace("/", "")));
             }
         };
     }

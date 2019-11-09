@@ -6,6 +6,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import dev.ujjwal.fluffytelegram.events.Broker;
+
 public class MainActivity extends AppCompatActivity {
 
     NSDHelperRegister nsdHelperRegister;
@@ -50,5 +56,22 @@ public class MainActivity extends AppCompatActivity {
             nsdHelperDisccover.tearDown();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorEvent(Broker broker) {
+        Toast.makeText(getApplicationContext(), broker.getBROKER_URL(), Toast.LENGTH_SHORT).show();
     }
 }
