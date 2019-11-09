@@ -75,6 +75,28 @@ public class Main2Activity extends AppCompatActivity {
             nsdRegister = new NsdRegister(getApplicationContext());
         if (nsdDiscover == null)
             nsdDiscover = new NsdDiscover(getApplicationContext());
+
+        findViewById(R.id.nsdStart).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (nsdRegister == null)
+                    nsdRegister = new NsdRegister(getApplicationContext());
+                else
+                    Toast.makeText(getApplicationContext(), "NSD already running", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        findViewById(R.id.nsdStop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (nsdRegister != null) {
+                    nsdRegister.tearDown();
+                    nsdRegister = null;
+                    Toast.makeText(getApplicationContext(), "NSD stopped", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getApplicationContext(), "NSD isn't started", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void initStudent() {
@@ -124,15 +146,15 @@ public class Main2Activity extends AppCompatActivity {
             startService(mqttIntent);
         }
 
-        if (Constants.IS_STUDENT) {
-            enableMQTT();
+        if (Constants.IS_TEACHER) {
+            findViewById(R.id.linear_layout_1).setVisibility(View.VISIBLE);
         }
+        enableMQTT();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMqttBrokerEvent(MqttBrokerInfo mqttBrokerInfo) {
         Constants.BROKER_STARTED = mqttBrokerInfo.isBROKER_STARTED();
-        enableMQTT();
     }
 
     private void enableMQTT() {

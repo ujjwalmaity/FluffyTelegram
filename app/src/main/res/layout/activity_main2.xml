@@ -18,14 +18,41 @@
         android:textStyle="italic"
         tools:text="Nsd Service Info" />
 
+    <LinearLayout
+        android:id="@+id/linear_layout_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_nsdInfo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <Button
+            android:id="@+id/nsdStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NSD START"
+            android:textColor="@color/blue" />
+
+        <Button
+            android:id="@+id/nsdStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="NSD STOP"
+            android:textColor="@color/red" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/linear_layout_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_nsdInfo"
+        android:layout_below="@id/linear_layout_1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="80dp"
         android:orientation="horizontal"
         android:visibility="invisible">
 
