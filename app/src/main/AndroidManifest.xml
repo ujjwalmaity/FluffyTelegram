@@ -25,6 +25,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".Main2Activity" />
+
+        <service
+            android:name=".services.MqttBroker"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -1,15 +1,19 @@
 package dev.ujjwal.fluffytelegram;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import dev.ujjwal.fluffytelegram.events.MqttBrokerInfo;
 import dev.ujjwal.fluffytelegram.events.NsdDiscoverInfo;
 import dev.ujjwal.fluffytelegram.events.NsdRegisterInfo;
+import dev.ujjwal.fluffytelegram.services.MqttBroker;
 import dev.ujjwal.fluffytelegram.services.NsdDiscover;
 import dev.ujjwal.fluffytelegram.services.NsdRegister;
 
@@ -94,5 +98,16 @@ public class Main2Activity extends AppCompatActivity {
         String host = nsdDiscoverInfo.getHost();
         int port = nsdDiscoverInfo.getPort();
         tv_nsdInfo.setText("Name: " + name + "  Type: " + type + "\nHost: " + host + "  Port: " + port);
+        Constants.BROKER_URL = host;
+
+        if (Constants.IS_TEACHER && !Constants.BROKER_STARTED) {
+            Intent mqttIntent = new Intent(getApplicationContext(), MqttBroker.class);
+            startService(mqttIntent);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMqttBrokerEvent(MqttBrokerInfo mqttBrokerInfo) {
+        Constants.BROKER_STARTED = mqttBrokerInfo.isBROKER_STARTED();
     }
 }
