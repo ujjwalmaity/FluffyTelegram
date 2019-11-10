@@ -32,7 +32,7 @@ import dev.ujjwal.fluffytelegram.services.NsdRegister;
 public class Main2Activity extends AppCompatActivity {
 
     TextView tv_nsdInfo;
-    EditText editTextPayload;
+    EditText editTextPayload, editTextBrokerIp;
 
     NsdRegister nsdRegister;
     NsdDiscover nsdDiscover;
@@ -68,6 +68,7 @@ public class Main2Activity extends AppCompatActivity {
     private void init() {
         tv_nsdInfo = findViewById(R.id.tv_nsdInfo);
         editTextPayload = findViewById(R.id.payload);
+        editTextBrokerIp = findViewById(R.id.et_brokerIp);
     }
 
     private void initTeacher() {
@@ -102,6 +103,22 @@ public class Main2Activity extends AppCompatActivity {
     private void initStudent() {
         if (nsdDiscover == null)
             nsdDiscover = new NsdDiscover(getApplicationContext());
+
+        findViewById(R.id.linear_layout_5).setVisibility(View.VISIBLE);
+        findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ip = editTextBrokerIp.getText().toString().trim();
+                if (ip.length() < 10) {
+                    Toast.makeText(getApplicationContext(), "Enter valid IP", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                findViewById(R.id.linear_layout_5).setVisibility(View.GONE);
+                tv_nsdInfo.setText(ip);
+                Constants.BROKER_URL = ip;
+                enableMQTT();
+            }
+        });
     }
 
     @Override
@@ -149,6 +166,7 @@ public class Main2Activity extends AppCompatActivity {
         if (Constants.IS_TEACHER) {
             findViewById(R.id.linear_layout_1).setVisibility(View.VISIBLE);
         }
+        findViewById(R.id.linear_layout_5).setVisibility(View.GONE);
         enableMQTT();
     }
 
